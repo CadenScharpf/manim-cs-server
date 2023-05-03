@@ -14,20 +14,20 @@
 		{
             "label": "Run local server",
             "type": "shell",
-            "command": "docker run --rm -it -p 5000:5000 --name mcs-server manim-cs-server",
+            "command": "docker run --rm -it -p 80:80 --name mcs-server manim-cs-server",
             "group": {
-                "kind": "test",
-                "isDefault": true
+                "kind": "build",
+                "isDefault": false
             }
 			
         },
         {
-            "label": "Run local server",
+            "label": "build and push docker image",
             "type": "shell",
-            "command": ".vscode/scripts/build_push_image.sh",
+            "command": "${workspaceFolder}/.vscode/scripts/build_push_image.sh",
             "group": {
                 "kind": "build",
-                "isDefault": true
+                "isDefault": false
             }
 			
         }
