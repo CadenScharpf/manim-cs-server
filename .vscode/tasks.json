@@ -22,14 +22,13 @@
 			
         },
         {
-            "label": "build and push docker image",
+            "label": "build and push image",
             "type": "shell",
-            "command": "${workspaceFolder}/.vscode/scripts/build_push_image.sh",
+            "command": "sudo ${workspaceFolder}/.vscode/scripts/build_push_image.sh",
             "group": {
                 "kind": "build",
                 "isDefault": false
             }
-			
         }
     ]
 }
