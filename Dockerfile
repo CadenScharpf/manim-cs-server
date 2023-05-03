@@ -32,14 +32,14 @@ RUN wget -O /tmp/install-tl-unx.tar.gz http://mirror.ctan.org/systems/texlive/tl
 
 # install manim
 RUN pip install manim
+
 # install manimcs
 RUN pip install matplotlib
 RUN pip install manimcs
 RUN pip install flask
+RUN pip install gunicorn
 
-
-
-
+# user setup
 ARG NB_USER=manimuser
 ARG NB_UID=1000
 ENV USER ${NB_USER}
@@ -63,10 +63,13 @@ RUN mkdir /app/output /app/output/text /app/output/video /app/output/tex
 RUN chown -R ${NB_USER}:${NB_USER} /app
 RUN chmod -R 777 /app
 
+# Initialize server environment
 USER ${NB_USER}
-
-
-
-#CMD [ "/bin/bash" ]
 WORKDIR /app
-CMD [ "flask", "run", "--host=0.0.0.0" ]
+
+# ENTRYPOINT 
+# ENTRYPOINT ["/app/scripts/entrypoint.sh"]7
+CMD ["/app/scripts/entrypoint_prod.sh"]
+
+#CMD [ "flask", "run", "--host=0.0.0.0" ]
+#CMD [ "/bin/bash" ]

@@ -1,0 +1,35 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build Docker Image",
+            "type": "shell",
+            "command": "sudo docker build -t manim-cs-server .",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+			
+        },
+		{
+            "label": "Run local server",
+            "type": "shell",
+            "command": "docker run --rm -it -p 5000:5000 --name mcs-server manim-cs-server",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+			
+        },
+        {
+            "label": "Run local server",
+            "type": "shell",
+            "command": ".vscode/scripts/build_push_image.sh",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+			
+        }
+    ]
+}
