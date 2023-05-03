@@ -14,7 +14,7 @@
 		{
             "label": "Run local server",
             "type": "shell",
-            "command": "docker run --rm -it -p 80:80 --name mcs-server manim-cs-server",
+            "command": "docker run --rm -it -p 80:80 --name manim-cs-server -server manim-cs-server",
             "group": {
                 "kind": "build",
                 "isDefault": false

@@ -1,5 +1,3 @@
-# docker run --rm -it -p 5000:5000 --name mcs-server manim-cs-server
-
 FROM python:3.8-slim
 
 RUN apt-get update -qq \
@@ -15,7 +13,8 @@ RUN apt-get update -qq \
         pkg-config \
         make \
         wget \
-        ghostscript
+        ghostscript \
+        cron 
 
 # setup a minimal texlive installation
 COPY texlive-profile.txt /tmp/
@@ -63,13 +62,19 @@ RUN mkdir /app/output /app/output/text /app/output/video /app/output/tex
 RUN chown -R ${NB_USER}:${NB_USER} /app
 RUN chmod -R 777 /app
 
+# Add cron job to clean up old files
+COPY bin/storage_mgr.sh /usr/local/bin/storage_mgr.sh
+RUN chmod +x /usr/local/bin/storage_mgr.sh
+RUN touch /var/log/cron.log
+RUN (crontab -l ; echo "*/10 * * * * /usr/local/bin/storage_mgr.sh") | crontab -
+
 # Initialize server environment
 USER ${NB_USER}
 WORKDIR /app
 
 # ENTRYPOINT 
 # ENTRYPOINT ["/app/scripts/entrypoint.sh"]7
-CMD ["/app/scripts/entrypoint_prod.sh"]
+CMD ["/app/entrypoint_prod.sh"]
 
 #CMD [ "flask", "run", "--host=0.0.0.0" ]
 #CMD [ "/bin/bash" ]
