@@ -36,6 +36,7 @@ RUN pip install manim
 RUN pip install matplotlib
 RUN pip install manimcs
 RUN pip install flask
+RUN pip install flask-cors
 RUN pip install gunicorn
 
 # user setup

@@ -1,28 +1,26 @@
 import os
 from flask import Flask, jsonify, request, send_file
 from manimcs import ManimCsEngine
+from flask_cors import CORS
 
 
 app = Flask(__name__)
+cors = CORS(app)
+
 _output_dir = os.path.join(os.getcwd(), 'output')
 
-@app.route('/getfile', methods=['GET'])
-def return_files():
+@app.route('/getfile/<string:filename>', methods=['GET'])
+def return_files(filename):
     try:
-        json_data = request.get_json()
-        # validate request
-        if not 'file' in json_data:
-            raise Exception("Request must contain file path")
-        if(not os.path.exists(json_data['file'])):
+        filepath = os.path.join(os.getcwd(), 'output', filename)
+        if(not os.path.exists(filepath)):
             raise Exception("File not found")
-        sp = json_data['file'].split('/')
-        filename = sp[len(sp)-1]
         # return file
-        return send_file(json_data['file'], download_name=filename)
+        return send_file(filepath, download_name=filename)
     except Exception as e:
         return str(e)
 
-@app.route('/arraysort', methods=['GET'])
+@app.route('/arraysort', methods=['POST'])
 def arraysort():
     response = {'success': "false", 'message': ""}
     json_data = request.get_json()
@@ -37,7 +35,9 @@ def arraysort():
         return jsonify(response)
     # execute command
     try:
-        file = ManimCsEngine(command, inputValues=_inputValues, output_dir=_output_dir).generate()
+        filePath = ManimCsEngine(command, inputValues=_inputValues, output_dir=_output_dir).generate()
+        sp = filePath.split('/')
+        file = sp[len(sp)-1]
     except Exception as e:
         response['message'] = str(e)
         return jsonify(response)
