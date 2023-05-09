@@ -5,7 +5,7 @@ from flask_cors import CORS
 
 
 app = Flask(__name__)
-cors = CORS(app)
+CORS(app, origins=['https://cadenscharpf.tech', 'https://manimcs-demo.cadenscharpf.tech'])
 
 _output_dir = os.path.join(os.getcwd(), 'output')
 
